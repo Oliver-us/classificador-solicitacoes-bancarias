@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Classificador Bancário</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <header class="header">
+
+        <div class="container">
+
+            <div class="logo">
+                Banco Digital
+            </div>
+
+            <div class="subtitle">
+                Classificador de solicitações
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+
+        <section class="card">
+
+            <h1>
+                Como podemos ajudar?
+            </h1>
+
+            <p class="description">
+                Digite sua solicitação e o sistema identificará
+                automaticamente o tipo de atendimento.
+            </p>
+
+
+            <form method="POST">
+
+
+                <label for="texto">
+                    Sua solicitação
+                </label>
+
+
+                <textarea
+                    id="texto"
+                    name="texto"
+                    placeholder="Ex.: Preciso bloquear meu cartão..."
+                    required
+                ></textarea>
+
+
+                <button type="submit">
+                    Classificar solicitação
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+        {% if resultado %}
+
+        <section class="card resultado">
+
+            <h2>
+                Resultado da classificação
+            </h2>
+
+
+            <div class="resultado-box">
+
+                <span class="resultado-label">
+                    Categoria identificada
+                </span>
+
+                <strong>
+                    {{ resultado.categoria }}
+                </strong>
+
+
+                <span class="confianca">
+                    Confiança:
+                    {{ (resultado.confianca * 100)|round(0) }}%
+                </span>
+
+
+                {% if resultado.palavras %}
+
+                <div class="palavras">
+
+                    <span>
+                        Palavras identificadas:
+                    </span>
+
+                    {% for palavra in resultado.palavras %}
+
+                    <span class="tag">
+                        {{ palavra }}
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <section class="card">
+
+
+            <div class="historico-header">
+
+                <div>
+
+                    <h2>
+                        Histórico
+                    </h2>
+
+                    <p>
+                        Últimas solicitações classificadas
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if historico %}
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Solicitação
+                            </th>
+
+                            <th>
+                                Categoria
+                            </th>
+
+                            <th>
+                                Confiança
+                            </th>
+
+                            <th>
+                                Data
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in historico %}
+
+                        <tr>
+
+                            <td>
+                                {{ item[1] }}
+                            </td>
+
+                            <td>
+                                <span class="categoria">
+                                    {{ item[2] }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ (item[3] * 100)|round(0) }}%
+                            </td>
+
+                            <td>
+                                {{ item[4] }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="vazio">
+
+                Nenhuma solicitação classificada ainda.
+
+            </div>
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Classificador de Solicitações Bancárias
+        </p>
+
+        <span>
+            Python • Flask • spaCy • Pandas • SQLite
+        </span>
+
+    </footer>
+
+
+    <script
+        src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+
+</body>
+
+</html>
